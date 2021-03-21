@@ -28,7 +28,7 @@ https://neillrobson.com/flappai-bird/ (or play [**easy mode**](https://neillrobs
 ## Attributions
 
 > We, the present developers of FlappAI Bird, utilized as our base the game [Floppy Bird](https://github.com/nebez/floppybird) developed by [Nebez Briefkani](https://github.com/nebez).
-> Our use of the game's code for academic purposes falls under the terms of the [GNU Public License](LICENSE) speficied by the original author.
+> Our use of the game's code for academic purposes falls under the terms of the [GNU Public License](LICENSE) specified by the original author.
 > Following this notice is a comment from Nebez regarding the use of the original Flappy Bird assets created by Dong Nguyen.
 > In addition to this notice, we also wish to adopt his attribution and dispute policy, outlined below.
 > Thank you.
