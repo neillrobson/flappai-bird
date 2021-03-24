@@ -93,6 +93,7 @@
    -webkit-box-sizing: border-box;
    box-sizing: border-box;
    /* gpu acceleration */
+   transition: translate3d(0,0,0);
    -webkit-transition: translate3d(0,0,0);
    /* select disable */
    -webkit-touch-callout: none;
@@ -208,7 +209,8 @@ Screen - Game
    background-repeat: no-repeat;
 }
 
-#scoreboard
+#scoreboard,
+#savedata
 {
    position: absolute;
    display: none;
@@ -217,10 +219,14 @@ Screen - Game
    left: 43px;
    width: 236px;
    height: 280px;
-   background-image: url('../assets/scoreboard.png');
-   background-repeat: no-repeat;
 
    z-index: 1000;
+}
+
+#scoreboard
+{
+   background-image: url('../assets/scoreboard.png');
+   background-repeat: no-repeat;
 }
 
 #medal

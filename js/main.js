@@ -4,7 +4,8 @@ var debugmode = false;
 var states = Object.freeze({
    SplashScreen: 0,
    GameScreen: 1,
-   ScoreScreen: 2
+   ScoreScreen: 2,
+   SaveDataScreen: 3
 });
 
 var currentstate;
@@ -233,7 +234,7 @@ function gameloop() {
    }
 }
 
-//Handle space bar
+//Handle keyboard input
 $(document).keydown(function(e){
    //space bar!
    if(e.keyCode == 32)
@@ -243,6 +244,12 @@ $(document).keydown(function(e){
          $("#replay").click();
       else
          screenClick();
+   }
+
+   //s key
+   if(e.keyCode == 83)
+   {
+      toggleSaveData();
    }
 });
 
@@ -364,6 +371,25 @@ function playerDead()
             showScore();
          });
       });
+   }
+}
+
+var previousState;
+
+function toggleSaveData()
+{
+   if (currentstate == states.SaveDataScreen) {
+      $("#savedata").transition({ y: '-40px', opacity: 0 }, 1000, 'ease', function () {
+         $("#savedata").css("display", "none");
+         currentstate = previousState;
+      });
+   } else if (currentstate != states.GameScreen) { // No pausing for you!!
+      previousState = currentstate;
+      currentstate = states.SaveDataScreen;
+
+      $("#savedata").css("display", "block");
+      $("#savedata").css({ y: '40px', opacity: 0 }); //move it down so we can slide it up
+      $("#savedata").transition({ y: '0px', opacity: 1 }, 600, 'ease')
    }
 }
 
