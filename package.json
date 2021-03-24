@@ -1,0 +1,36 @@
+{
+  "name": "flappai-bird",
+  "version": "1.0.0",
+  "description": "A Flappy Bird clone, enhanced with Dynamic Difficulty Adjustment.",
+  "private": true,
+  "scripts": {
+    "build": "webpack --mode=development"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neillrobson/flappai-bird.git"
+  },
+  "keywords": [
+    "flappy",
+    "bird",
+    "dda",
+    "dynamic",
+    "difficulty",
+    "adjustment"
+  ],
+  "author": "Carl Klier, Neill Robson, Vibhav Srivaths",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/neillrobson/flappai-bird/issues"
+  },
+  "homepage": "https://github.com/neillrobson/flappai-bird#readme",
+  "devDependencies": {
+    "@babel/core": "^7.13.10",
+    "@babel/preset-env": "^7.13.12",
+    "babel-loader": "^8.2.2",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^8.1.0",
+    "webpack": "^5.28.0",
+    "webpack-cli": "^4.5.0"
+  }
+}

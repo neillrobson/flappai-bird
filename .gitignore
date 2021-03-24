@@ -224,3 +224,9 @@ pip-log.txt
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
+
+########################
+## NPM & Webpack
+########################
+
+node_modules/
