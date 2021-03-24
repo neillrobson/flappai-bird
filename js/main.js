@@ -1,3 +1,4 @@
+/* eslint-disable */
 var debugmode = false;
 
 var states = Object.freeze({
