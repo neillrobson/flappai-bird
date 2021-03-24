@@ -20,6 +20,8 @@ var flyArea = $("#flyarea").height();
 var score = 0;
 var highscore = 0;
 
+var savedata = [];
+
 var pipeheight = 90;
 var pipewidth = 52;
 var pipes = new Array();
@@ -50,29 +52,15 @@ $(document).ready(function() {
    if(savedscore != "")
       highscore = parseInt(savedscore);
 
+   //get save data if any
+   var saveDataEncoded = getCookie("savedata");
+   if (saveDataEncoded != "") {
+      savedata = JSON.parse(atob(saveDataEncoded));
+   }
+
    //start with the splash screen
    showSplash();
 });
-
-function getCookie(cname)
-{
-   var name = cname + "=";
-   var ca = document.cookie.split(';');
-   for(var i=0; i<ca.length; i++)
-   {
-      var c = ca[i].trim();
-      if (c.indexOf(name)==0) return c.substring(name.length,c.length);
-   }
-   return "";
-}
-
-function setCookie(cname,cvalue,exdays)
-{
-   var d = new Date();
-   d.setTime(d.getTime()+(exdays*24*60*60*1000));
-   var expires = "expires="+d.toGMTString();
-   document.cookie = cname + "=" + cvalue + "; " + expires;
-}
 
 function showSplash()
 {
@@ -387,6 +375,8 @@ function toggleSaveData()
       previousState = currentstate;
       currentstate = states.SaveDataScreen;
 
+      $("#encodedsave").val(getCookie("savedata"));
+
       $("#savedata").css("display", "block");
       $("#savedata").css({ y: '40px', opacity: 0 }); //move it down so we can slide it up
       $("#savedata").transition({ y: '0px', opacity: 1 }, 600, 'ease')
@@ -414,6 +404,9 @@ function showScore()
    setSmallScore();
    setHighScore();
    var wonmedal = setMedal();
+
+   savedata.push(score);
+   setObject("savedata", savedata, 999);
 
    //SWOOSH!
    soundSwoosh.stop();

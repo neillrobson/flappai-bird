@@ -1,7 +1,3 @@
-import * as math from './math'
+import * as cookie from './cookie'
 
-const test = () => {
-  console.log('2pi = ' + math.sum(math.pi, math.pi))
-}
-
-test()
+Object.assign(window, cookie)
