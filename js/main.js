@@ -24,6 +24,7 @@ var savedata = [];
 
 var pipeheight = 90;
 var pipewidth = 52;
+var pipeInterval = 1400;
 var pipes = new Array();
 
 var replayclickable = false;
@@ -112,7 +113,7 @@ function startGame()
    //start up our loops
    var updaterate = 1000.0 / 60.0 ; //60 times a second
    loopGameloop = setInterval(gameloop, updaterate);
-   loopPipeloop = setInterval(updatePipes, 1400);
+   loopPipeloop = setInterval(updatePipes, pipeInterval);
 
    //jump from the start!
    playerJump();
@@ -234,6 +235,24 @@ $(document).keydown(function(e){
          screenClick();
    }
 
+   // key pressed is [ or ]
+   if(e.keyCode == 219 || e.keyCode == 221)
+   {
+      modifyPipeHeight(e.keyCode);
+   }
+
+   // key pressed is page up or page down
+   if(e.keyCode == 33 || e.keyCode == 34)
+   {
+      modifyGravity(e.keyCode);
+   }
+
+   // key pressed is , or .
+   if(e.keyCode == 188 || e.keyCode == 190)
+   {
+      modifyPipeInterval(e.keyCode);
+   }
+
    //s key
    if(e.keyCode == 83)
    {
@@ -256,6 +275,53 @@ function screenClick()
    else if(currentstate == states.SplashScreen)
    {
       startGame();
+   }
+}
+
+// base gravity was .25
+function modifyGravity(key)
+{
+   // should discuss setting good values for a min and max gravity
+   if(key == 33)
+   {
+      gravity = gravity + .01;
+   } else {
+      gravity = gravity - .01;
+   }
+}
+
+// base pipe interval was 1400
+function modifyPipeInterval(key)
+{
+   // should discuss setting good values for a min and max pipe interval
+   if(key == 188)
+   {
+      pipeInterval = pipeInterval - 100;
+      clearInterval(loopPipeloop);
+      if(currentstate == states.GameScreen)
+      {
+         loopPipeloop = setInterval(updatePipes, pipeInterval);
+      }
+
+   } else {
+      pipeInterval = pipeInterval + 100;
+      clearInterval(loopPipeloop);
+      if(currentstate == states.GameScreen)
+      {
+         loopPipeloop = setInterval(updatePipes, pipeInterval);
+      }
+   }
+}
+
+//base pipe height was 90
+function modifyPipeHeight(key)
+{
+   // should discuss setting good values for a min and max pipeheight
+   if(key == 219)
+   {
+      pipeheight = pipeheight - 2;
+   } else {
+      pipeheight = pipeheight + 2;
    }
 }
 
