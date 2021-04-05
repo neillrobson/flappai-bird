@@ -223,6 +223,16 @@ Screen - Game
    z-index: 1000;
 }
 
+#encodedsave {
+   /* select enable */
+   -webkit-touch-callout: text;
+   -webkit-user-select: text;
+   -khtml-user-select: text;
+   -moz-user-select: text;
+   -ms-user-select: text;
+   user-select: text;
+}
+
 #scoreboard
 {
    background-image: url('../assets/scoreboard.png');
