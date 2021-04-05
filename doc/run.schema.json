@@ -1,0 +1,30 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "run.schema.json",
+    "title": "Run",
+    "description": "Metrics on a single playthrough of Flappy Bird",
+    "type": "object",
+    "properties": {
+        "startTime": {
+            "description": "The time at which the run began, expressed in milliseconds since UNIX epoch",
+            "type": "integer"
+        },
+        "duration": {
+            "description": "How long the run ran, between start and player death, in milliseconds",
+            "type": "integer"
+        },
+        "score": {
+            "description": "How many pipes (obstacles) the player passed in the run",
+            "type": "integer"
+        },
+        "deathType": {
+            "description": "Enumerated type of death, expressed as an integer.",
+            "type": "integer"
+        }
+    },
+    "required": [
+        "startTime",
+        "duration",
+        "score"
+    ]
+}
