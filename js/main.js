@@ -263,6 +263,11 @@ $(document).keydown(function(e){
    {
       toggleSaveData();
    }
+
+   if (e.key === "c")
+   {
+      clearSaveData();
+   }
 });
 
 //Handle mouse down OR touch start
@@ -455,6 +460,12 @@ function toggleSaveData()
       $("#savedata").css({ y: '40px', opacity: 0 }); //move it down so we can slide it up
       $("#savedata").transition({ y: '0px', opacity: 1 }, 600, 'ease')
    }
+}
+
+function clearSaveData()
+{
+   savedata = [];
+   setObject("savedata", savedata, 999);
 }
 
 function showScore()
