@@ -20,6 +20,8 @@ var flyArea = $("#flyarea").height();
 var score = 0;
 var highscore = 0;
 
+var startTime = 0;
+var duration = 0;
 var savedata = [];
 
 var pipeheight = 90;
@@ -114,6 +116,9 @@ function startGame()
    var updaterate = 1000.0 / 60.0 ; //60 times a second
    loopGameloop = setInterval(gameloop, updaterate);
    loopPipeloop = setInterval(updatePipes, pipeInterval);
+
+   // Mark the start time of this run
+   startTime = Date.now();
 
    //jump from the start!
    playerJump();
@@ -392,6 +397,9 @@ function setMedal()
 
 function playerDead()
 {
+   //Log the run duration
+   duration = Date.now() - startTime;
+
    //stop animating everything!
    $(".animated").css('animation-play-state', 'paused');
    $(".animated").css('-webkit-animation-play-state', 'paused');
@@ -471,7 +479,8 @@ function showScore()
    setHighScore();
    var wonmedal = setMedal();
 
-   savedata.push(score);
+   var runMetrics = { startTime, duration, score };
+   savedata.push(runMetrics);
    setObject("savedata", savedata, 999);
 
    //SWOOSH!
