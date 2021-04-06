@@ -1,5 +1,5 @@
 /* eslint-disable */
-var debugmode = false;
+var debugmode = true;
 
 var states = Object.freeze({
    SplashScreen: 0,
@@ -9,6 +9,8 @@ var states = Object.freeze({
 });
 
 var currentstate;
+
+var collisionPosition = 10;
 
 var gravity = 0.25;
 var velocity = 0;
@@ -60,6 +62,11 @@ $(document).ready(function() {
    if (saveDataEncoded != "") {
       savedata = JSON.parse(atob(saveDataEncoded));
    }
+
+   //retrieve collision Position
+   var savedCollisionPosition = getCookie("collisionPosition");
+   if(savedCollisionPosition != "")
+      collisionPosition = parseInt(savedCollisionPosition);
 
    //start with the splash screen
    showSplash();
@@ -169,6 +176,9 @@ function gameloop() {
    if(box.bottom >= $("#land").offset().top)
    {
       playerDead();
+      collisionPosition = 12;
+      console.log(collisionPosition);
+      setCookie("collisionPosition", collisionPosition, 999);
       return;
    }
 
@@ -212,6 +222,9 @@ function gameloop() {
       {
          //no! we touched the pipe
          playerDead();
+         collisionPosition = 11;
+         console.log(collisionPosition);
+         setCookie("collisionPosition", collisionPosition, 999);
          return;
       }
    }
