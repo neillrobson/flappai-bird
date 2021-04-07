@@ -180,7 +180,7 @@ function gameloop() {
       collisionPosition = 12;
       playerDead();
       console.log("hit ground");
-      
+
       console.log("collisionPosition: " + collisionPosition);
       setCookie("collisionPosition", collisionPosition, 999);
       return;
@@ -229,7 +229,7 @@ function gameloop() {
       // boundingbox2.css('height', heightTopPipe);
       // boundingbox2.css('width', widthTopPipe);
 
-      
+
       // var boundingbox3 = $("#botPipeBox");
       // boundingbox3.css('left', leftBottomPipe);
       // boundingbox3.css('top', topBottomPipe);
@@ -254,7 +254,7 @@ function gameloop() {
          collisionPosition = 11;
          playerDead();
          console.log("hit pipe");
-         
+
          console.log("collisionPosition: " + collisionPosition);
          setCookie("collisionPosition", collisionPosition, 999);
          return;
@@ -309,7 +309,8 @@ $(document).keydown(function(e){
       toggleSaveData();
    }
 
-   if (e.key === "c")
+   // TODO: Ensure that no modifiers are pressed!
+   if (e.key === "q")
    {
       clearSaveData();
    }
@@ -472,7 +473,7 @@ function playerDead()
          modifyPipeHeight("increase");
          modifyPipeInterval("increase");
       }
-   }  
+   }
 
    // If we already got gold medal, make it harder for them to get platinum medal
    if(score > 30){
@@ -481,7 +482,7 @@ function playerDead()
       modifyGravity("increase");
       modifyPipeHeight("decrease");
       modifyPipeInterval("decrease");
-   }  
+   }
 
    //drop the bird to the floor
    var playerbottom = $("#player").position().top + $("#player").width(); //we use width because he'll be rotated 90 deg
@@ -564,7 +565,7 @@ function showScore()
    setHighScore();
    var wonmedal = setMedal();
 
-   var runMetrics = { startTime, duration, score };
+   var runMetrics = { startTime, duration, score, gravity, pipeInterval, pipeheight };
    savedata.push(runMetrics);
    setObject("savedata", savedata, 999);
 
