@@ -565,7 +565,7 @@ function showScore()
    setHighScore();
    var wonmedal = setMedal();
 
-   var runMetrics = { startTime, duration, score, gravity, pipeInterval, pipeheight };
+   var runMetrics = { startTime, duration, score, gravity, pipeInterval, pipeheight, collisionPosition };
    savedata.push(runMetrics);
    setObject("savedata", savedata, 999);
 
