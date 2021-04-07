@@ -301,6 +301,31 @@ Screen - Game
    border: 1px solid red;
 }
 
+.topPipeBox
+{
+   position: absolute;
+   display: none;
+   top: 0;
+   left: 0;
+   width: 0;
+   height: 0;
+   border: 1px solid yellow;
+
+}
+
+.botPipeBox
+{
+   position: absolute;
+   display: none;
+   top: 0;
+   left: 0;
+   width: 0;
+   height: 0;
+   border: 1px solid blueviolet;
+
+}
+
+
 #player
 {
    left: 60px;

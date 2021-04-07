@@ -117,6 +117,8 @@ function startGame()
    {
       //show the bounding boxes
       $(".boundingbox").show();
+      $(".botPipeBox").show();
+      $(".topPipeBox").show();
    }
 
    //start up our loops
@@ -175,9 +177,11 @@ function gameloop() {
    //did we hit the ground?
    if(box.bottom >= $("#land").offset().top)
    {
-      playerDead();
       collisionPosition = 12;
-      console.log(collisionPosition);
+      playerDead();
+      console.log("hit ground");
+      
+      console.log("collisionPosition: " + collisionPosition);
       setCookie("collisionPosition", collisionPosition, 999);
       return;
    }
@@ -194,11 +198,22 @@ function gameloop() {
    //determine the bounding box of the next pipes inner area
    var nextpipe = pipes[0];
    var nextpipeupper = nextpipe.children(".pipe_upper");
+   var nextpipelower = nextpipe.children(".pipe_lower");
 
    var pipetop = nextpipeupper.offset().top + nextpipeupper.height();
    var pipeleft = nextpipeupper.offset().left - 2; // for some reason it starts at the inner pipes offset, not the outer pipes.
    var piperight = pipeleft + pipewidth;
    var pipebottom = pipetop + pipeheight;
+
+   // var topTopPipe = nextpipeupper.offset().top;
+   // var leftTopPipe = nextpipeupper.offset().left - 2;
+   // var widthTopPipe = pipewidth;
+   // var heightTopPipe = topTopPipe + nextpipeupper.height();
+
+   // var topBottomPipe = nextpipeupper.offset().top + nextpipeupper.height() + pipeheight;
+   // var leftBottomPipe = nextpipeupper.offset().left - 2;
+   // var widthBottomPipe = pipewidth
+   // var heightBottomPipe = topBottomPipe - pipeheight;
 
    if(debugmode)
    {
@@ -207,6 +222,21 @@ function gameloop() {
       boundingbox.css('top', pipetop);
       boundingbox.css('height', pipeheight);
       boundingbox.css('width', pipewidth);
+
+      // var boundingbox2 = $("#topPipeBox");
+      // boundingbox2.css('left', leftTopPipe);
+      // boundingbox2.css('top', topTopPipe);
+      // boundingbox2.css('height', heightTopPipe);
+      // boundingbox2.css('width', widthTopPipe);
+
+      
+      // var boundingbox3 = $("#botPipeBox");
+      // boundingbox3.css('left', leftBottomPipe);
+      // boundingbox3.css('top', topBottomPipe);
+      // boundingbox3.css('height', heightBottomPipe);
+      // boundingbox3.css('width', widthBottomPipe);
+
+
    }
 
    //have we gotten inside the pipe yet?
@@ -221,9 +251,11 @@ function gameloop() {
       else
       {
          //no! we touched the pipe
-         playerDead();
          collisionPosition = 11;
-         console.log(collisionPosition);
+         playerDead();
+         console.log("hit pipe");
+         
+         console.log("collisionPosition: " + collisionPosition);
          setCookie("collisionPosition", collisionPosition, 999);
          return;
       }
@@ -305,11 +337,13 @@ function screenClick()
 function modifyGravity(key)
 {
    // should discuss setting good values for a min and max gravity
-   if(key == 33)
+   if(key == 33 || key == "increase")
    {
       gravity = gravity + .01;
+      console.log("gravity increased to: " + gravity);
    } else {
       gravity = gravity - .01;
+      console.log("gravity decreased to: " + gravity);
    }
 }
 
@@ -317,9 +351,10 @@ function modifyGravity(key)
 function modifyPipeInterval(key)
 {
    // should discuss setting good values for a min and max pipe interval
-   if(key == 188)
+   if(key == 188 || key == "decrease")
    {
-      pipeInterval = pipeInterval - 100;
+      pipeInterval = pipeInterval - 50;
+      console.log("pipeInterval decreased to: " + pipeInterval)
       clearInterval(loopPipeloop);
       if(currentstate == states.GameScreen)
       {
@@ -327,7 +362,8 @@ function modifyPipeInterval(key)
       }
 
    } else {
-      pipeInterval = pipeInterval + 100;
+      pipeInterval = pipeInterval + 50;
+      console.log("pipeInterval increased to: " + pipeInterval)
       clearInterval(loopPipeloop);
       if(currentstate == states.GameScreen)
       {
@@ -340,11 +376,13 @@ function modifyPipeInterval(key)
 function modifyPipeHeight(key)
 {
    // should discuss setting good values for a min and max pipeheight
-   if(key == 219)
+   if(key == 219 || key == "decrease")
    {
       pipeheight = pipeheight - 2;
+      console.log("pipeheight decreased to: " + pipeheight)
    } else {
       pipeheight = pipeheight + 2;
+      console.log("pipeheight increased to: " + pipeheight)
    }
 }
 
@@ -421,6 +459,29 @@ function playerDead()
    //stop animating everything!
    $(".animated").css('animation-play-state', 'paused');
    $(".animated").css('-webkit-animation-play-state', 'paused');
+
+   // decrease difficulty is they haven't gotten a bronze medal yet
+   if(score < 10){
+      console.log("score: " + score);
+      if(collisionPosition == 12){
+         console.log("CollisionPosition inside dead exp 12: " + collisionPosition)
+         modifyGravity("decrease");
+      } else if(collisionPosition == 11){
+         console.log("CollisionPosition inside dead exp 11: " + collisionPosition)
+         modifyGravity("decrease");
+         modifyPipeHeight("increase");
+         modifyPipeInterval("increase");
+      }
+   }  
+
+   // If we already got gold medal, make it harder for them to get platinum medal
+   if(score > 30){
+      console.log("score: " + score);
+      // doesn't really matter how we died, we just want to increase overall difficulty
+      modifyGravity("increase");
+      modifyPipeHeight("decrease");
+      modifyPipeInterval("decrease");
+   }  
 
    //drop the bird to the floor
    var playerbottom = $("#player").position().top + $("#player").width(); //we use width because he'll be rotated 90 deg
