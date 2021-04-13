@@ -303,24 +303,30 @@ $(document).keydown(function(e){
       modifyPipeInterval(e.keyCode);
    }
 
-   //s key
-   if(e.keyCode == 83)
-   {
-      toggleSaveData();
-   }
-
-   // TODO: Ensure that no modifiers are pressed!
-   if (e.key === "q")
+   if (e.key === "q" && !(e.ctrlKey || e.metaKey || e.altKey || e.shiftKey))
    {
       clearSaveData();
    }
 });
 
 //Handle mouse down OR touch start
-if("ontouchstart" in window)
+if ("ontouchstart" in window) {
    $(document).on("touchstart", screenClick);
-else
+
+   $("#savedata").on("touchstart", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      downloadSaveData();
+   });
+} else {
    $(document).on("mousedown", screenClick);
+
+   $("#savedata").mousedown(function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      downloadSaveData();
+   });
+}
 
 function screenClick()
 {
@@ -518,22 +524,10 @@ function playerDead()
 
 var previousState;
 
-function toggleSaveData()
+function downloadSaveData()
 {
-   if (currentstate == states.SaveDataScreen) {
-      $("#savedata").transition({ y: '-40px', opacity: 0 }, 1000, 'ease', function () {
-         $("#savedata").css("display", "none");
-         currentstate = previousState;
-      });
-   } else if (currentstate != states.GameScreen) { // No pausing for you!!
-      previousState = currentstate;
-      currentstate = states.SaveDataScreen;
-
-      $("#encodedsave").val(getCookie("savedata"));
-
-      $("#savedata").css("display", "block");
-      $("#savedata").css({ y: '40px', opacity: 0 }); //move it down so we can slide it up
-      $("#savedata").transition({ y: '0px', opacity: 1 }, 600, 'ease')
+   if (currentstate != states.GameScreen) { // No pausing for you!!
+      download("save.txt", getCookie("savedata"));
    }
 }
 
