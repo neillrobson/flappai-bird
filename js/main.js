@@ -181,7 +181,7 @@ function gameloop() {
    //did we hit the ground?
    if(box.bottom >= $("#land").offset().top)
    {
-      collisionPosition = 12;
+      collisionPosition = 10;
       playerDead();
       console.log("hit ground");
 
@@ -252,12 +252,31 @@ function gameloop() {
          //yeah! we're within bounds
 
       }
+      else if(boxtop<pipetop)
+      {
+         collisionPosition = 11;
+         playerDead();
+         console.log("Collision with upper pipe");
+         console.log("collisionPosition: " + collisionPosition);
+         setCookie("collisionPosition", collisionPosition, 999);
+         return;
+      }
+      else if(boxtop < pipebottom)
+      {
+         collisionPosition = 12;
+         playerDead();
+         console.log("Collision with lower pipe");
+         console.log("collisionPosition: " + collisionPosition);
+         setCookie("collisionPosition", collisionPosition, 999);
+         return;
+      }
+      
       else
       {
          //no! we touched the pipe
-         collisionPosition = 11;
+         collisionPosition = 13;
          playerDead();
-         console.log("hit pipe");
+         console.log("hit pipe, catch all");
 
          console.log("collisionPosition: " + collisionPosition);
          setCookie("collisionPosition", collisionPosition, 999);
