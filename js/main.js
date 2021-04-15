@@ -31,6 +31,10 @@ var pipewidth = 52;
 var pipeInterval = 1400;
 var pipes = new Array();
 
+gravityMultiplier = 1;
+pipeHeightMultiplier = 1;
+pipeIntervalMultiplier = 1;
+
 var replayclickable = false;
 
 //sounds
@@ -346,10 +350,12 @@ function modifyGravity(key)
    // should discuss setting good values for a min and max gravity
    if(key == 33 || key == "increase")
    {
-      gravity = gravity + .01;
+      gravityMultiplier = gravityMultiplier + .01
+      gravity = gravity * gravityMultiplier
       console.log("gravity increased to: " + gravity);
    } else {
-      gravity = gravity - .01;
+      gravityMultiplier = gravityMultiplier - .01
+      gravity = gravity * gravityMultiplier
       console.log("gravity decreased to: " + gravity);
    }
 }
@@ -360,7 +366,8 @@ function modifyPipeInterval(key)
    // should discuss setting good values for a min and max pipe interval
    if(key == 188 || key == "decrease")
    {
-      pipeInterval = pipeInterval - 50;
+      pipeIntervalMultiplier = pipeIntervalMultiplier - .01
+      pipeInterval = pipeInterval * pipeIntervalMultiplier;
       console.log("pipeInterval decreased to: " + pipeInterval)
       clearInterval(loopPipeloop);
       if(currentstate == states.GameScreen)
@@ -369,7 +376,8 @@ function modifyPipeInterval(key)
       }
 
    } else {
-      pipeInterval = pipeInterval + 50;
+      pipeIntervalMultiplier = pipeIntervalMultiplier + .01
+      pipeInterval = pipeInterval * pipeIntervalMultiplier;
       console.log("pipeInterval increased to: " + pipeInterval)
       clearInterval(loopPipeloop);
       if(currentstate == states.GameScreen)
@@ -385,10 +393,12 @@ function modifyPipeHeight(key)
    // should discuss setting good values for a min and max pipeheight
    if(key == 219 || key == "decrease")
    {
-      pipeheight = pipeheight - 2;
+      pipeHeightMultiplier = pipeHeightMultiplier - .01
+      pipeheight = pipeheight * pipeHeightMultiplier
       console.log("pipeheight decreased to: " + pipeheight)
    } else {
-      pipeheight = pipeheight + 2;
+      pipeHeightMultiplier = pipeHeightMultiplier + .01
+      pipeheight = pipeheight * pipeHeightMultiplier
       console.log("pipeheight increased to: " + pipeheight)
    }
 }
