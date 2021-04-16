@@ -4,7 +4,7 @@
   "description": "A Flappy Bird clone, enhanced with Dynamic Difficulty Adjustment.",
   "private": true,
   "scripts": {
-    "build": "webpack --mode=development",
+    "build": "webpack --mode=production",
     "serve": "webpack serve --mode=development --port 5000"
   },
   "repository": {
