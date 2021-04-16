@@ -1,78 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <title>Floppy Bird</title>
-      <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-      <meta name="author" content="Nebez Briefkani" />
-      <meta name="description" content="play floppy bird. a remake of popular game flappy bird built in html/css/js" />
-      <meta name="keywords" content="flappybird,flappy,bird,floppybird,floppy,html,html5,css,css3,js,javascript,jquery,github,nebez,briefkani,nebezb,open,source,opensource" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 
-      <!-- Open Graph tags -->
-      <meta property="og:title" content="Floppy Bird" />
-      <meta property="og:description" content="play floppy bird. a remake of popular game flappy bird built in html/css/js" />
-      <meta property="og:type" content="website" />
-      <meta property="og:image" content="https://nebezb.com/floppybird/assets/thumb.png" />
-      <meta property="og:url" content="https://nebezb.com/floppybird/" />
-      <meta property="og:site_name" content="Floppy Bird" />
+<head>
+   <title>FlappAI Bird</title>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+   <meta name="author" content="Carl Klier, Neill Robson, Vibhav Srivaths" />
+   <meta name="description"
+      content="Play FlappAI Bird: a remake of popular game Flappy Bird with dynamic difficulty adjustment." />
+   <meta name="keywords"
+      content="flappybird,flappy,bird,flappai,ai,dda,dynamic,difficulty,adjustment,html,html5,css,css3,js,javascript,jquery,github,open,source,opensource" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 
-      <!-- Style sheets -->
-      <link href="css/reset.css" rel="stylesheet">
-      <link href="css/main.css" rel="stylesheet">
-   </head>
-   <body>
-      <div id="gamecontainer">
-         <div id="gamescreen">
-            <div id="sky" class="animated">
-               <div id="flyarea">
-                  <div id="ceiling" class="animated"></div>
-                  <!-- This is the flying and pipe area container -->
-                  <div id="player" class="bird animated"></div>
+   <!-- Open Graph tags -->
+   <meta property="og:title" content="FlappAI Bird" />
+   <meta property="og:description"
+      content="Play FlappAI Bird: a remake of popular game Flappy Bird with dynamic difficulty adjustment." />
+   <meta property="og:type" content="website" />
+   <meta property="og:image" content="https://neillrobson.com/flappai-bird/assets/screencap.png" />
+   <meta property="og:url" content="https://neillrobson.com/flappai-bird/" />
+   <meta property="og:site_name" content="FlappAI Bird" />
 
-                  <div id="bigscore"></div>
+   <!-- Style sheets -->
+   <link href="css/reset.css" rel="stylesheet">
+   <link href="css/main.css" rel="stylesheet">
+</head>
 
-                  <div id="splash"></div>
+<body>
+   <div id="gamecontainer">
+      <div id="gamescreen">
+         <div id="sky" class="animated">
+            <div id="flyarea">
+               <div id="ceiling" class="animated"></div>
+               <!-- This is the flying and pipe area container -->
+               <div id="player" class="bird animated"></div>
 
-                  <div id="scoreboard">
-                     <div id="medal"></div>
-                     <div id="currentscore"></div>
-                     <div id="highscore"></div>
-                     <div id="replay"><img src="assets/replay.png" alt="replay"></div>
-                  </div>
+               <div id="bigscore"></div>
 
-                  <!-- Pipes go here! -->
+               <div id="splash"></div>
+
+               <div id="scoreboard">
+                  <div id="medal"></div>
+                  <div id="currentscore"></div>
+                  <div id="highscore"></div>
+                  <div id="replay"><img src="assets/replay.png" alt="replay"></div>
                </div>
+
+               <!-- Pipes go here! -->
             </div>
-            <div id="land" class="animated"><div id="debug"></div></div>
+         </div>
+         <div id="land" class="animated">
+            <div id="debug"></div>
          </div>
       </div>
-      <div id="footer">
-         <a href="https://www.dotgears.com/">original game/concept/art by dong nguyen</a>
-         <a href="https://nebezb.com/">recreated by nebez briefkani</a>
-         <a href="https://github.com/nebez/floppybird/">view github project</a>
-      </div>
-      <div class="boundingbox" id="playerbox"></div>
-      <div class="boundingbox" id="pipebox"></div>
+   </div>
+   <div id="footer">
+      <a href="https://www.dotgears.com/">original game/concept/art by dong nguyen</a>
+      <a href="https://nebezb.com/">recreated by nebez briefkani</a>
+      <a href="https://github.com/neillrobson/flappai-bird/">enhanced by students at NC State University</a>
+      <a href="javascript:void(0);" id="savedata">download save data</a>
+   </div>
+   <div class="boundingbox" id="playerbox"></div>
+   <div class="boundingbox" id="pipebox"></div>
+   <div class="topPipeBox" id="topPipeBox"></div>
+   <div class="botPipeBox" id="botPipeBox"></div>
 
-      <script src="js/jquery.min.js"></script>
-      <script src="js/jquery.transit.min.js"></script>
-      <script src="js/buzz.min.js"></script>
-      <script src="js/main.js"></script>
+   <script src="js/jquery.min.js"></script>
+   <script src="js/jquery.transit.min.js"></script>
+   <script src="js/buzz.min.js"></script>
+   <script src="js/bundle.js"></script>
+   <script src="js/main.js"></script>
 
-      <script>
-      function inIframe() {
-          try {
-              return window.self !== window.top;
-          } catch (e) {
-              return true;
-          }
-      }
-      if (!inIframe() && window.location.hostname == 'nebezb.com') {
-         window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-         ga('create', 'UA-48047334-1', 'auto');
-         ga('send', 'pageview');
-      }
-      </script>
-      <script async src='https://www.google-analytics.com/analytics.js'></script>
-   </body>
+</body>
+
 </html>
