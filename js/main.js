@@ -1,5 +1,5 @@
 /* eslint-disable */
-var debugmode = true;
+var debugmode = false;
 
 var states = Object.freeze({
    SplashScreen: 0,
@@ -270,7 +270,7 @@ function gameloop() {
          setCookie("collisionPosition", collisionPosition, 999);
          return;
       }
-      
+
       else
       {
          //no! we touched the pipe
