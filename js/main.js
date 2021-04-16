@@ -1,5 +1,5 @@
 /* eslint-disable */
-var debugmode = true;
+var debugmode = false;
 
 var states = Object.freeze({
    SplashScreen: 0,
@@ -482,10 +482,12 @@ function playerDead()
       console.log("score: " + score);
       if(collisionPosition == 12){
          console.log("CollisionPosition inside dead exp 12: " + collisionPosition)
-         modifyGravity("decrease");
+         //modifyGravity("decrease");
+         modifyPipeHeight("increase");
+         modifyPipeInterval("increase");
       } else if(collisionPosition == 11){
          console.log("CollisionPosition inside dead exp 11: " + collisionPosition)
-         modifyGravity("decrease");
+         //modifyGravity("decrease");
          modifyPipeHeight("increase");
          modifyPipeInterval("increase");
       }
@@ -495,7 +497,7 @@ function playerDead()
    if(score > 30){
       console.log("score: " + score);
       // doesn't really matter how we died, we just want to increase overall difficulty
-      modifyGravity("increase");
+      //modifyGravity("increase");
       modifyPipeHeight("decrease");
       modifyPipeInterval("decrease");
    }
