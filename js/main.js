@@ -25,6 +25,7 @@ var highscore = 0;
 var startTime = 0;
 var duration = 0;
 var savedata = [];
+var ddaEnabled = false;
 
 var pipeheight = 90;
 var pipewidth = 52;
@@ -65,6 +66,22 @@ $(document).ready(function() {
    var saveDataEncoded = getCookie("savedata");
    if (saveDataEncoded != "") {
       savedata = JSON.parse(atob(saveDataEncoded));
+   }
+
+   // Check save data, then URL for dda enabled variable
+   // Set randomly if no setting is found
+   var ddaCookie = getCookie("ddaEnabled");
+   if (ddaCookie != "") {
+      ddaEnabled = ddaCookie === "true";
+   } else {
+      if (window.location.search == "?a")
+         ddaEnabled = true;
+      else if (window.location.search == "?b")
+         ddaEnabled = false;
+      else
+         ddaEnabled = Math.random() < 0.5;
+
+      setCookie("ddaEnabled", ddaEnabled, 999);
    }
 
    //retrieve collision Position
@@ -366,6 +383,7 @@ function screenClick()
 // base gravity was .25
 function modifyGravity(key)
 {
+   if (!ddaEnabled) return;
    // should discuss setting good values for a min and max gravity
    if(key == 33 || key == "increase")
    {
@@ -382,6 +400,7 @@ function modifyGravity(key)
 // base pipe interval was 1400
 function modifyPipeInterval(key)
 {
+   if (!ddaEnabled) return;
    // should discuss setting good values for a min and max pipe interval
    if(key == 188 || key == "decrease")
    {
@@ -409,6 +428,7 @@ function modifyPipeInterval(key)
 //base pipe height was 90
 function modifyPipeHeight(key)
 {
+   if (!ddaEnabled) return;
    // should discuss setting good values for a min and max pipeheight
    if(key == 219 || key == "decrease")
    {
@@ -497,7 +517,7 @@ function playerDead()
    $(".animated").css('-webkit-animation-play-state', 'paused');
 
    // decrease difficulty is they haven't gotten a bronze medal yet
-   if(score < 10){
+   if(ddaEnabled && score < 10){
       console.log("score: " + score);
       if(collisionPosition == 12){
          console.log("CollisionPosition inside dead exp 12: " + collisionPosition)
@@ -511,7 +531,7 @@ function playerDead()
    }
 
    // If we already got gold medal, make it harder for them to get platinum medal
-   if(score > 30){
+   if(ddaEnabled && score > 30){
       console.log("score: " + score);
       // doesn't really matter how we died, we just want to increase overall difficulty
       modifyGravity("increase");
@@ -563,7 +583,13 @@ function downloadSaveData()
 function clearSaveData()
 {
    savedata = [];
-   setObject("savedata", savedata, 999);
+   highscore = 0;
+   clearAllCookies();
+
+   ddaEnabled = false;
+   gravity = 0.25;
+   pipeInterval = 1400;
+   pipeheight = 90;
 }
 
 function showScore()
