@@ -24,7 +24,7 @@ var highscore = 0;
 
 var startTime = 0;
 var duration = 0;
-var savedata = [];
+var savedata = {};
 var ddaEnabled = false;
 
 var pipeheight = 90;
@@ -62,12 +62,6 @@ $(document).ready(function() {
    if(savedscore != "")
       highscore = parseInt(savedscore);
 
-   //get save data if any
-   var saveDataEncoded = getCookie("savedata");
-   if (saveDataEncoded != "") {
-      savedata = JSON.parse(atob(saveDataEncoded));
-   }
-
    // Check save data, then URL for dda enabled variable
    // Set randomly if no setting is found
    var ddaCookie = getCookie("ddaEnabled");
@@ -83,6 +77,14 @@ $(document).ready(function() {
 
       setCookie("ddaEnabled", ddaEnabled, 999);
    }
+
+   //get save data if any
+   savedata = getObject("savedata");
+   savedata.ddaEnabled = ddaEnabled;
+   if (!Array.isArray(savedata.data)) {
+      savedata.data = [];
+   }
+   setObject("savedata", savedata, 999);
 
    //retrieve collision Position
    var savedCollisionPosition = getCookie("collisionPosition");
@@ -582,7 +584,7 @@ function downloadSaveData()
 
 function clearSaveData()
 {
-   savedata = [];
+   savedata = {};
    highscore = 0;
    clearAllCookies();
 
@@ -615,7 +617,7 @@ function showScore()
    var wonmedal = setMedal();
 
    var runMetrics = { startTime, duration, score, gravity, pipeInterval, pipeheight, collisionPosition };
-   savedata.push(runMetrics);
+   savedata.data.push(runMetrics);
    setObject("savedata", savedata, 999);
 
    //SWOOSH!

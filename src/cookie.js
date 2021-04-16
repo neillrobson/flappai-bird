@@ -19,6 +19,14 @@ function setObject (cname, obj, exdays) {
   setCookie(cname, btoa(JSON.stringify(obj)), exdays)
 }
 
+function getObject (cname) {
+  const str = getCookie(cname)
+  if (str !== '') {
+    return JSON.parse(atob(str))
+  }
+  return {}
+}
+
 function clearAllCookies () {
   const cookies = document.cookie.split('; ')
   for (let c = 0; c < cookies.length; c++) {
@@ -36,4 +44,4 @@ function clearAllCookies () {
   }
 }
 
-export { getCookie, setCookie, clearAllCookies, setObject }
+export { getCookie, setCookie, clearAllCookies, setObject, getObject }
