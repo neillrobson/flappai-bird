@@ -87,7 +87,8 @@ $(document).ready(function() {
    if (!Array.isArray(savedata.data)) {
       savedata.data = [];
    }
-   console.log(savedata)
+   if (debugmode)
+      console.log(savedata);
    setObject("savedata", savedata, 999);
 
    //retrieve collision Position
@@ -218,9 +219,10 @@ function gameloop() {
    {
       collisionPosition = 10;
       playerDead();
-      console.log("hit ground");
-
-      console.log("collisionPosition: " + collisionPosition);
+      if (debugmode) {
+         console.log("hit ground");
+         console.log("collisionPosition: " + collisionPosition);
+      }
       setCookie("collisionPosition", collisionPosition, 999);
       return;
    }
@@ -291,8 +293,10 @@ function gameloop() {
       {
          collisionPosition = 11;
          playerDead();
-         console.log("Collision with upper pipe");
-         console.log("collisionPosition: " + collisionPosition);
+         if (debugmode) {
+            console.log("Collision with upper pipe");
+            console.log("collisionPosition: " + collisionPosition);
+         }
          setCookie("collisionPosition", collisionPosition, 999);
          return;
       }
@@ -300,8 +304,10 @@ function gameloop() {
       {
          collisionPosition = 12;
          playerDead();
-         console.log("Collision with lower pipe");
-         console.log("collisionPosition: " + collisionPosition);
+         if (debugmode) {
+            console.log("Collision with lower pipe");
+            console.log("collisionPosition: " + collisionPosition);
+         }
          setCookie("collisionPosition", collisionPosition, 999);
          return;
       }
@@ -311,9 +317,10 @@ function gameloop() {
          //no! we touched the pipe
          collisionPosition = 13;
          playerDead();
-         console.log("hit pipe, catch all");
-
-         console.log("collisionPosition: " + collisionPosition);
+         if (debugmode) {
+            console.log("hit pipe, catch all");
+            console.log("collisionPosition: " + collisionPosition);
+         }
          setCookie("collisionPosition", collisionPosition, 999);
          return;
       }
@@ -328,7 +335,7 @@ function gameloop() {
 
       //and score a point
       playerScore();
-      
+
    }
 
 }
@@ -409,11 +416,13 @@ function modifyGravity(key)
    {
       gravityMultiplier = gravityMultiplier + .01
       gravity = gravity * gravityMultiplier
-      console.log("gravity increased to: " + gravity);
+      if (debugmode)
+         console.log("gravity increased to: " + gravity);
    } else {
       gravityMultiplier = gravityMultiplier - .01
       gravity = gravity * gravityMultiplier
-      console.log("gravity decreased to: " + gravity);
+      if (debugmode)
+         console.log("gravity decreased to: " + gravity);
    }
 }
 
@@ -422,20 +431,22 @@ function modifyPipeInterval(key)
 {
    if (!ddaEnabled) return;
    // should discuss setting good values for a min and max pipe interval
-   if(key == 188 || key == "decrease")
-   {
+   if (key == 188 || key == "decrease") {
       pipeIntervalMultiplier = pipeIntervalMultiplier - .0075
       pipeInterval = pipeInterval * pipeIntervalMultiplier;
-      pipeRate = Math.round(60.0*pipeInterval / 1000);
-      console.log("pipeInterval decreased to: " + pipeInterval)
-      console.log("pipeRate decreased to " + pipeRate) 
-
+      pipeRate = Math.round(60.0 * pipeInterval / 1000);
+      if (debugmode) {
+         console.log("pipeInterval decreased to: " + pipeInterval)
+         console.log("pipeRate decreased to " + pipeRate)
+      }
    } else {
       pipeIntervalMultiplier = pipeIntervalMultiplier + .0075
       pipeInterval = pipeInterval * pipeIntervalMultiplier;
       pipeRate = Math.round(60.0*pipeInterval / 1000);
-      console.log("pipeInterval increased to: " + pipeInterval)
-      console.log("pipeRate increased to " + pipeRate)
+      if (debugmode) {
+         console.log("pipeInterval increased to: " + pipeInterval)
+         console.log("pipeRate increased to " + pipeRate)
+      }
    }
 }
 
@@ -448,11 +459,13 @@ function modifyPipeHeight(key)
    {
       pipeHeightMultiplier = pipeHeightMultiplier - .01
       pipeheight = pipeheight * pipeHeightMultiplier
-      console.log("pipeheight decreased to: " + pipeheight)
+      if (debugmode)
+         console.log("pipeheight decreased to: " + pipeheight);
    } else {
       pipeHeightMultiplier = pipeHeightMultiplier + .01
       pipeheight = pipeheight * pipeHeightMultiplier
-      console.log("pipeheight increased to: " + pipeheight)
+      if (debugmode)
+         console.log("pipeheight increased to: " + pipeheight);
    }
 }
 
@@ -532,7 +545,8 @@ function playerDead()
 
    // decrease difficulty is they haven't gotten a bronze medal yet
    if(ddaEnabled && score < 10){
-      console.log("score: " + score);
+      if (debugmode)
+         console.log("score: " + score);
       // collision positon can be 11 or 12 depending on hitting upper or lower pipe
       modifyPipeHeight("increase");
       modifyPipeInterval("increase");
@@ -541,7 +555,8 @@ function playerDead()
 
    // If we already got gold medal, make it harder for them to get platinum medal
    if(ddaEnabled && score > 30){
-      console.log("score: " + score);
+      if (debugmode)
+         console.log("score: " + score);
       // doesn't really matter how we died, we just want to increase overall difficulty
       modifyPipeHeight("decrease");
       modifyPipeInterval("decrease");
@@ -627,7 +642,8 @@ function showScore()
 
    var runMetrics = { startTime, duration, score, gravity, pipeInterval, pipeheight, collisionPosition };
    savedata.data.push(runMetrics);
-   console.log(savedata)
+   if (debugmode)
+      console.log(savedata);
    setObject("savedata", savedata, 999);
 
    //SWOOSH!
