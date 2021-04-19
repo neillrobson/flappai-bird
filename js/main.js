@@ -32,6 +32,9 @@ var pipewidth = 52;
 var pipeInterval = 1400;
 var pipes = new Array();
 
+var pipeRate = Math.round(60.0*pipeInterval / 1000); // every this number of times gameLoop is called, we generate a pipe
+var pipeRateCount = 0;
+
 gravityMultiplier = 1;
 pipeHeightMultiplier = 1;
 pipeIntervalMultiplier = 1;
@@ -84,6 +87,7 @@ $(document).ready(function() {
    if (!Array.isArray(savedata.data)) {
       savedata.data = [];
    }
+   console.log(savedata)
    setObject("savedata", savedata, 999);
 
    //retrieve collision Position
@@ -147,7 +151,7 @@ function startGame()
    //start up our loops
    var updaterate = 1000.0 / 60.0 ; //60 times a second
    loopGameloop = setInterval(gameloop, updaterate);
-   loopPipeloop = setInterval(updatePipes, pipeInterval);
+   //loopPipeloop = setInterval(updatePipes, pipeInterval);
 
    // Mark the start time of this run
    startTime = Date.now();
@@ -166,6 +170,18 @@ function updatePlayer(player)
 }
 
 function gameloop() {
+   pipeRateCount = (pipeRateCount % pipeRate)
+
+   if(pipeRateCount == 0){
+      if (score > 10 && score % 5 == 0){
+         modifyPipeInterval("decrease")
+         modifyPipeHeight("decrease")
+      }
+      updatePipes();
+      pipeRateCount = 0;
+   }
+   pipeRateCount = pipeRateCount + 1;
+
    var player = $("#player");
 
    //update the player speed/position
@@ -312,7 +328,9 @@ function gameloop() {
 
       //and score a point
       playerScore();
+      
    }
+
 }
 
 //Handle keyboard input
@@ -406,24 +424,18 @@ function modifyPipeInterval(key)
    // should discuss setting good values for a min and max pipe interval
    if(key == 188 || key == "decrease")
    {
-      pipeIntervalMultiplier = pipeIntervalMultiplier - .01
+      pipeIntervalMultiplier = pipeIntervalMultiplier - .0075
       pipeInterval = pipeInterval * pipeIntervalMultiplier;
+      pipeRate = Math.round(60.0*pipeInterval / 1000);
       console.log("pipeInterval decreased to: " + pipeInterval)
-      clearInterval(loopPipeloop);
-      if(currentstate == states.GameScreen)
-      {
-         loopPipeloop = setInterval(updatePipes, pipeInterval);
-      }
+      console.log("pipeRate decreased to " + pipeRate) 
 
    } else {
-      pipeIntervalMultiplier = pipeIntervalMultiplier + .01
+      pipeIntervalMultiplier = pipeIntervalMultiplier + .0075
       pipeInterval = pipeInterval * pipeIntervalMultiplier;
+      pipeRate = Math.round(60.0*pipeInterval / 1000);
       console.log("pipeInterval increased to: " + pipeInterval)
-      clearInterval(loopPipeloop);
-      if(currentstate == states.GameScreen)
-      {
-         loopPipeloop = setInterval(updatePipes, pipeInterval);
-      }
+      console.log("pipeRate increased to " + pipeRate)
    }
 }
 
@@ -521,24 +533,16 @@ function playerDead()
    // decrease difficulty is they haven't gotten a bronze medal yet
    if(ddaEnabled && score < 10){
       console.log("score: " + score);
-      if(collisionPosition == 12){
-         console.log("CollisionPosition inside dead exp 12: " + collisionPosition)
-         //modifyGravity("decrease");
-         modifyPipeHeight("increase");
-         modifyPipeInterval("increase");
-      } else if(collisionPosition == 11){
-         console.log("CollisionPosition inside dead exp 11: " + collisionPosition)
-         //modifyGravity("decrease");
-         modifyPipeHeight("increase");
-         modifyPipeInterval("increase");
-      }
+      // collision positon can be 11 or 12 depending on hitting upper or lower pipe
+      modifyPipeHeight("increase");
+      modifyPipeInterval("increase");
+
    }
 
    // If we already got gold medal, make it harder for them to get platinum medal
    if(ddaEnabled && score > 30){
       console.log("score: " + score);
       // doesn't really matter how we died, we just want to increase overall difficulty
-      //modifyGravity("increase");
       modifyPipeHeight("decrease");
       modifyPipeInterval("decrease");
    }
@@ -594,6 +598,9 @@ function clearSaveData()
    gravity = 0.25;
    pipeInterval = 1400;
    pipeheight = 90;
+
+   savedata.data = []
+   savedata.ddaEnabled = ddaEnabled
 }
 
 function showScore()
@@ -620,6 +627,7 @@ function showScore()
 
    var runMetrics = { startTime, duration, score, gravity, pipeInterval, pipeheight, collisionPosition };
    savedata.data.push(runMetrics);
+   console.log(savedata)
    setObject("savedata", savedata, 999);
 
    //SWOOSH!
