@@ -27,9 +27,16 @@ var duration = 0;
 var savedata = {};
 var ddaEnabled = false;
 
+var pipeHeightMin = 75;
 var pipeheight = 90;
+var pipeHeightMax = 130
+
 var pipewidth = 52;
+
+var pipeIntervalMin = 1100;
 var pipeInterval = 1400;
+var pipeIntervalMax = 1800;
+
 var pipes = new Array();
 
 var pipeRate = Math.round(60.0*pipeInterval / 1000); // every this number of times gameLoop is called, we generate a pipe
@@ -432,8 +439,13 @@ function modifyPipeInterval(key)
    if (!ddaEnabled) return;
    // should discuss setting good values for a min and max pipe interval
    if (key == 188 || key == "decrease") {
-      pipeIntervalMultiplier = pipeIntervalMultiplier - .0075
+      pipeIntervalMultiplier = pipeIntervalMultiplier - .01
       pipeInterval = pipeInterval * pipeIntervalMultiplier;
+      if(pipeInterval > pipeIntervalMax){
+         pipeInterval = pipeIntervalMax;
+      } else if(pipeInterval < pipeIntervalMin){
+         pipeInterval = pipeIntervalMin;
+      }
       pipeRate = Math.round(60.0 * pipeInterval / 1000);
       if (debugmode) {
          console.log("pipeInterval decreased to: " + pipeInterval)
@@ -442,6 +454,11 @@ function modifyPipeInterval(key)
    } else {
       pipeIntervalMultiplier = pipeIntervalMultiplier + .0075
       pipeInterval = pipeInterval * pipeIntervalMultiplier;
+      if(pipeInterval > pipeIntervalMax){
+         pipeInterval = pipeIntervalMax;
+      } else if(pipeInterval < pipeIntervalMin){
+         pipeInterval = pipeIntervalMin;
+      }
       pipeRate = Math.round(60.0*pipeInterval / 1000);
       if (debugmode) {
          console.log("pipeInterval increased to: " + pipeInterval)
@@ -457,13 +474,23 @@ function modifyPipeHeight(key)
    // should discuss setting good values for a min and max pipeheight
    if(key == 219 || key == "decrease")
    {
-      pipeHeightMultiplier = pipeHeightMultiplier - .01
+      pipeHeightMultiplier = pipeHeightMultiplier - .013
       pipeheight = pipeheight * pipeHeightMultiplier
+      if(pipeheight > pipeHeightMax){
+         pipeheight = pipeHeightMax;
+      } else if(pipeheight < pipeHeightMin){
+         pipeheight = pipeHeightMin;
+      }
       if (debugmode)
          console.log("pipeheight decreased to: " + pipeheight);
    } else {
       pipeHeightMultiplier = pipeHeightMultiplier + .01
       pipeheight = pipeheight * pipeHeightMultiplier
+      if(pipeheight > pipeHeightMax){
+         pipeheight = pipeHeightMax;
+      } else if(pipeheight < pipeHeightMin){
+         pipeheight = pipeHeightMin;
+      }
       if (debugmode)
          console.log("pipeheight increased to: " + pipeheight);
    }
@@ -558,8 +585,14 @@ function playerDead()
       if (debugmode)
          console.log("score: " + score);
       // doesn't really matter how we died, we just want to increase overall difficulty
-      modifyPipeHeight("decrease");
-      modifyPipeInterval("decrease");
+      //modifyPipeHeight("decrease");
+      //modifyPipeInterval("decrease");
+
+      // to try to prevent slingshotting lets reset the multiplier if score is greater than 30
+      if (debugmode)
+         console.log("Multilpiers reset to 1");
+      pipeHeightMultiplier = 1.0
+      pipeIntervalMultiplier = 1.0
    }
 
    //drop the bird to the floor
