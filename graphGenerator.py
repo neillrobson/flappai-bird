@@ -82,7 +82,7 @@ import numpy as np
 import json
 
 data = []
-with open('ddaEnabledData.csv') as csvfile:
+with open('notddaEnabledData.csv') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         data.append(row[0])
@@ -94,10 +94,14 @@ for testerData in data:
     scores = []
     pipeInterval = []
     pipeHeight = []
+    i = 0
     for run in jsonData["data"]:
+        if(i != 0 and run['pipeInterval'] == 1410.5):
+            break
         scores.append(run['score'])
         pipeInterval.append(run['pipeInterval'])
         pipeHeight.append(run['pipeheight'])
+        i = i + 1
     xvals = np.arange(1, len(scores) + 1, 1)
     playerData = {"xvals":xvals, "scores":scores, "pipeInterval":pipeInterval, "pipeHeight":pipeHeight}
     allData.append(playerData)
