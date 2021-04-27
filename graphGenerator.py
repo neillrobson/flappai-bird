@@ -107,18 +107,109 @@ for testerData in data:
     allData.append(playerData)
 
 
-#plt.figure(figsize=(20,5))
-plt.figure(figsize=(5,5))
 fig, ax = plt.subplots()
-#plt.legend(bbox_to_anchor=(1.04,1), loc="upper left")
 ax.set_xlabel('Playthrough')
 ax.set_ylabel('Score')
-ax.set_title('Scores over the playthroughs')
+ax.set_title('DDA Enabled Scores')
 
 for i in range(len(allData)):
     ax.plot(allData[i]["xvals"], allData[i]["scores"], label='player' + str(i))
 ax.legend()
-plt.savefig('scores.png')
+
+fig, ax = plt.subplots()
+ax.set_xlabel('Playthrough')
+ax.set_ylabel('pipeInterval')
+ax.set_title('Baseline pipeInterval Distances')
+
+for i in range(len(allData)):
+    ax.plot(allData[i]["xvals"], allData[i]["pipeInterval"], label='player' + str(i))
+ax.legend()
+
+fig, ax = plt.subplots()
+ax.set_xlabel('Playthrough')
+ax.set_ylabel('pipeHeight')
+ax.set_title('Baseline pipeHeight Distances')
+
+for i in range(len(allData)):
+    ax.plot(allData[i]["xvals"], allData[i]["pipeHeight"], label='player' + str(i))
+ax.legend()
     
-#plt.figure(figsize=(20,5))
+
+
+
+# %%
+import csv
+import base64
+import matplotlib.pyplot as plt
+import numpy as np
+import json
+
+dataEnabled = []
+with open('ddaEnabledData.csv') as csvfile:
+    reader = csv.reader(csvfile)
+    for row in reader:
+        dataEnabled.append(row[0])
+
+dataNotEnabled = []
+with open('notddaEnabledData.csv') as csvfile:
+    reader = csv.reader(csvfile)
+    for row in reader:
+        dataNotEnabled.append(row[0])
+
+allDataEnabled = []
+for testerData in dataEnabled:
+    dataBytes = base64.b64decode(testerData)
+    jsonData = json.loads(dataBytes.decode('utf8'))
+    scores = []
+    pipeInterval = []
+    pipeHeight = []
+    i = 0
+    for run in jsonData["data"]:
+        if(i != 0 and run['pipeInterval'] == 1410.5):
+            break
+        scores.append(run['score'])
+        pipeInterval.append(run['pipeInterval'])
+        pipeHeight.append(run['pipeheight'])
+        i = i + 1
+    xvals = np.arange(1, len(scores) + 1, 1)
+    playerData = {"xvals":xvals, "scores":scores, "pipeInterval":pipeInterval, "pipeHeight":pipeHeight}
+    allDataEnabled.append(playerData)
+
+
+allDataNotEnabled = []
+for testerData in dataNotEnabled:
+    dataBytes = base64.b64decode(testerData)
+    jsonData = json.loads(dataBytes.decode('utf8'))
+    scores = []
+    pipeInterval = []
+    pipeHeight = []
+    i = 0
+    for run in jsonData["data"]:
+        if(i != 0 and run['pipeInterval'] == 1410.5):
+            break
+        scores.append(run['score'])
+        pipeInterval.append(run['pipeInterval'])
+        pipeHeight.append(run['pipeheight'])
+        i = i + 1
+    xvals = np.arange(1, len(scores) + 1, 1)
+    playerData = {"xvals":xvals, "scores":scores, "pipeInterval":pipeInterval, "pipeHeight":pipeHeight}
+    allDataNotEnabled.append(playerData)    
+
+fig, ax = plt.subplots()
+#plt.legend(bbox_to_anchor=(1.04,1), loc="upper left")
+ax.set_xlabel('Playthrough')
+ax.set_ylabel('Score')
+ax.set_title('DDA vs. Baseline Scores')
+
+for i in range(len(allDataEnabled)):
+    ax.plot(allDataEnabled[i]["xvals"], allDataEnabled[i]["scores"], label='DDA_Enabled', color='green')
+
+for i in range(len(allDataNotEnabled)):
+    ax.plot(allDataNotEnabled[i]["xvals"], allDataNotEnabled[i]["scores"], label='Baseline', color='red')    
+
+handles, labels = plt.gca().get_legend_handles_labels()
+labels, ids = np.unique(labels, return_index=True)
+handles = [handles[i] for i in ids]
+plt.legend(handles, labels, loc='best')
+#ax.legend()
 # %%
